@@ -12,17 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build with Gradle
-        run: gradle clean build jacocoTestReport
+      - name: build
+        run: gradle clean build 
 
   checkstyle_job:
     runs-on: ubuntu-latest
-    name: Checkstyle job
+    name:  checkstyle
     needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run Checkstyle with GitHub Action
+      - name: run
         uses: nikitasavinov/checkstyle-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -33,15 +33,15 @@ jobs:
 
   coverage:
     runs-on: ubuntu-latest
-    name: Coverage job
+    name: coverage
     needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Make gradlew executable
+      - name: exec make 
         run: chmod +x ./gradlew
       - name: Cache Jacoco results
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.6
         with:
           path: build/jacoco
           key: jacoco-${{ runner.os }}
@@ -50,12 +50,12 @@ jobs:
 
   jacoco_report:
     runs-on: ubuntu-latest
-    name: Jacoco Report job
+    name: report job
     needs: coverage
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Publish Jacoco Report
+      - name: report
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: 'build/jacoco/*.xml'
