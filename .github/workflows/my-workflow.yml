@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ "hw" ]
+  pull_request:
+    branches: [ "hw" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build with Gradle
+        run: gradle clean build jacocoTestReport
+
+  checkstyle_job:
+    runs-on: ubuntu-latest
+    name: Checkstyle job
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Checkstyle with GitHub Action
+        uses: nikitasavinov/checkstyle-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: 'github-pr-check'
+          tool_name: 'testtool'
+          fail_on_error: true
+          level: 'error'
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage job
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Cache Jacoco results
+        uses: actions/cache@v2
+        with:
+          path: build/jacoco
+          key: jacoco-${{ runner.os }}
+      - name: Run Jacoco Test Report
+        run: ./gradlew jacocoTestReport
+
+  jacoco_report:
+    runs-on: ubuntu-latest
+    name: Jacoco Report job
+    needs: coverage
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Publish Jacoco Report
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: 'build/jacoco/*.xml'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true
