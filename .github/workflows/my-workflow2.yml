@@ -20,7 +20,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Run Tests and Coverage
-        run: ./gradlew clean testCoverage
+        run: gradle clean build 
 
   jacoco_report:
     runs-on: ubuntu-latest
