@@ -25,21 +25,20 @@ jobs:
       - name: Generate Jacoco Report
         run: gradle jacocoTestReport
       - name: Upload Jacoco Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: /build/reports/jacoco/test/report.xml
+          path: ${{ github.workspace }}/build/reports/jacoco/test
 
       - name: Jacoco Report to PR
         uses: madrapps/jacoco-report@v1.6.1
+        env:
+          ACTIONS_RUNNER_DEBUG: true  # Enable debug mode
         with:
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
-            ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/html
           token: ${{ secrets.GITHUB_TOKEN }}
           update-comment: true
           title: '`Coverage Report`'
-          debug-mode: true
 
   checkstyle_job:
     runs-on: ubuntu-latest
