@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: ${{ github.workspace }}/build/reports/jacoco/test/html
+          path: ${{ github.workspace }}/build/reports/jacoco/test/xml
 
       - name: Jacoco Report to PR
         uses: madrapps/jacoco-report@v1.6.1
