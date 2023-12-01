@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      - name: debug info   
+        run: ls -R /home/runner/work/tfs23-ci-ArtAlee/tfs23-ci-ArtAlee/build
       - name: Upload Report
         uses: 'actions/upload-artifact@v2'
         with:
