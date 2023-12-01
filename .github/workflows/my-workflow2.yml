@@ -10,36 +10,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Build
-        run: gradle clean build
 
-  coverage:
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: |
+        ./gradlew clean build
+
+    - name: Run Jacoco tests
+      run: |
+        ./gradlew jacocoTestReport
+
+  jacoco-report:
     runs-on: ubuntu-latest
     needs: build
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: debug info   
-        run: ls -R /home/runner/work/tfs23-ci-ArtAlee/tfs23-ci-ArtAlee/build
-      - name: Upload Report
-        uses: 'actions/upload-artifact@v2'
-        with:
-          name: report.xml
-          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
 
-      - name: Jacoco Report to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.3
-        with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 80
-          min-coverage-changed-files: 60
-          debug-mode: false
-          title: Code Coverage
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download Jacoco report
+      uses: actions/download-artifact@v2
+      with:
+        name: jacoco-report
+        path: build/reports/jacoco/test/
+
+    - name: Jacoco Report Comment
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        files: build/reports/jacoco/test/html/index.html
+        comment: true
+        base: main
 
 
   checkstyle_job:
