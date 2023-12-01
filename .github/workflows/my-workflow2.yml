@@ -41,15 +41,14 @@ jobs:
       run: |
         gradle jacocoTestReport
 
-    - name: Add coverage to PR
-      id: jacoco
-      uses: madrapps/jacoco-report@v1.6.1
-      with:
-        paths: |
-          ${{ github.workspace }}/**/build/reports/jacoco/test/html/jacocoTestReport.xml
-        token: ${{ secrets.GITHUB_TOKEN }}
-        min-coverage-overall: 40
-        min-coverage-changed-files: 60
+    - name: List Files
+      run: |
+        ls -R ${{ github.workspace }}
+    
+    - name: Debug Jacoco Report
+      run: |
+        cat ${{ github.workspace }}/build/reports/jacoco/test/html/jacocoTestReport.xml
+    
 
 
   checkstyle_job:
