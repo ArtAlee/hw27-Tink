@@ -47,6 +47,10 @@ jobs:
           name: testReport
           path: build/jacoco/test.exec
           
+      - name: List Files
+        run: |
+          ls -R ${{ github.workspace }}
+          
       - name: Make gradlew executable
         run: chmod +x gradlew          
       - name: Run Jacoco tests
