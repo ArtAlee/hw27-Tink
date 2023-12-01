@@ -62,8 +62,10 @@ jobs:
           paths: |
             ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 40
-          min-coverage-changed-files: 60
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          title: Code Coverage
+          update-comment: true
 
   checkstyle_job:
     runs-on: ubuntu-latest
@@ -78,6 +80,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
-          tool_name: 'checkstyle'
+          tool_name: 'testtool'
           fail_on_error: true
           level: 'error'
