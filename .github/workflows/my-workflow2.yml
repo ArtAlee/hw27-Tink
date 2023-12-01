@@ -22,27 +22,22 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Create Jacoco Directory
-        run: mkdir -p ${{ github.workspace }}/build/reports/jacoco/test
-      - name: Generate Jacoco Report
-        run: gradle jacocoTestReport
-      - name: Upload Jacoco Report
-        uses: actions/upload-artifact@v2
+      - name: Upload Report
+        uses: 'actions/upload-artifact@v2'
         with:
-          name: jacoco-report
-          path: ${{ github.workspace }}/build/reports/jacoco/test/xml
+          name: report.xml
+          path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
 
       - name: Jacoco Report to PR
-        uses: madrapps/jacoco-report@v1.6.1
-        env:
-          ACTIONS_RUNNER_DEBUG: true  # Enable debug mode
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/*.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          update-comment: true
-          title: '`Coverage Report`'
-      - name: Debug Artifact Path
-        run: ls -R ${{ github.workspace }}/build/reports/jacoco/test
+          min-coverage-overall: 80
+          min-coverage-changed-files: 60
+          debug-mode: false
+          title: Code Coverage
 
 
   checkstyle_job:
