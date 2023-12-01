@@ -47,9 +47,11 @@ jobs:
           name: testReport
           path: build/jacoco/test.exec
           
+      - name: Make gradlew executable
+        run: chmod +x gradlew          
       - name: Run Jacoco tests
         run: |
-          gradle jacocoTestReport
+          ./gradlew jacocoTestReport
 
       - name: List Files
         run: |
