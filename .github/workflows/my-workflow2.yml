@@ -35,7 +35,7 @@ jobs:
         env:
           ACTIONS_RUNNER_DEBUG: true  # Enable debug mode
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/*.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           update-comment: true
           title: '`Coverage Report`'
