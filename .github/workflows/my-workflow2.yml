@@ -35,11 +35,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-  
+      - name: Make gradlew executable
+        run: chmod +x gradlew
       - name: Run Jacoco tests
         run: |
-          gradle jacocoTestReport
-  
+          ./gradlew jacocoTestReport
+      - name: List Files
+        run: |
+          ls -R ${{ github.workspace }}
+    
+      - name: Debug Jacoco Report
+        run: |
+          cat ${{ github.workspace }}/build/reports/jacoco/test/html/jacocoTestReport.xml
+
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
