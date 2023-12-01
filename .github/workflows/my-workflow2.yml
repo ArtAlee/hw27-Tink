@@ -28,10 +28,6 @@ jobs:
       run: |
         ./gradlew clean build
 
-    - name: Run Jacoco tests
-      run: |
-        ./gradlew jacocoTestReport
-
   jacoco-report:
     runs-on: ubuntu-latest
     needs: build
@@ -40,19 +36,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Download Jacoco report
-      uses: actions/download-artifact@v2
-      with:
-        name: jacoco-report
-        path: build/reports/jacoco/test/
+    - name: Run Jacoco tests
+      run: |
+        ./gradlew jacocoTestReport
 
-    - name: Jacoco Report Comment
+    - name: Add coverage to PR
+      id: jacoco
       uses: madrapps/jacoco-report@v1.6.1
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        files: build/reports/jacoco/test/html/index.html
-        comment: true
-        base: main
+        paths: |
+          ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
+          ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 40
+        min-coverage-changed-files: 60
 
 
   checkstyle_job:
