@@ -25,7 +25,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build
+          gradle clean build
       - name: List Files
         run: |
           ls -R ${{ github.workspace }}
