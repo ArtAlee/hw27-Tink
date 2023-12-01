@@ -80,6 +80,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
-          tool_name: 'testtool'
+          tool_name: 'checkstyle.xml'
           fail_on_error: true
           level: 'error'
+          filtermode: nofilter
