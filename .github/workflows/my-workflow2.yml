@@ -83,4 +83,4 @@ jobs:
           tool_name: 'checkstyle.xml'
           fail_on_error: true
           level: 'error'
-          filtermode: nofilter
+          filter_mode: nofilter
