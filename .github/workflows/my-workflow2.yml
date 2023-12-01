@@ -39,6 +39,10 @@ jobs:
         run: chmod +x gradlew
       - name: Run Jacoco tests
         run: |
+          ./gradlew test
+        
+      - name: Run Jacoco tests
+        run: |
           ./gradlew jacocoTestReport
       - name: List Files
         run: |
