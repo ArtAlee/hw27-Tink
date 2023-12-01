@@ -26,15 +26,12 @@ jobs:
       - name: Build with Gradle
         run: |
           gradle clean build
+          
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: testReport
           path: build/jacoco/test.exec 
-          
-      - name: List Files
-        run: |
-          ls -R ${{ github.workspace }}
           
       
 
@@ -50,24 +47,13 @@ jobs:
         with:
           name: testReport
           path: build/jacoco
-          
-      - name: List Files
-        run: |
-          ls -R ${{ github.workspace }}
-          
+                 
       - name: Make gradlew executable
         run: chmod +x gradlew          
       - name: Run Jacoco tests
         run: |
           ./gradlew jacocoTestReport
 
-      - name: List Files
-        run: |
-          ls -R ${{ github.workspace }}
-
-      - name: Debug Jacoco Report
-        run: |
-          cat ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
 
       - name: Add coverage to PR
         id: jacoco
