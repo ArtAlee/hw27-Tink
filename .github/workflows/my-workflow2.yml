@@ -39,6 +39,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           update-comment: true
           title: '`Coverage Report`'
+      - name: Debug Artifact Path
+        run: ls -R ${{ github.workspace }}/build/reports/jacoco/test
+
 
   checkstyle_job:
     runs-on: ubuntu-latest
