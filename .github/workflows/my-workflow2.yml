@@ -36,9 +36,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+
     - name: Run Jacoco tests
       run: |
-        ./gradlew jacocoTestReport
+        gradle jacocoTestReport
 
     - name: Add coverage to PR
       id: jacoco
